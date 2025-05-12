@@ -52,6 +52,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '495764425049',
     projectId: 'flutterfiretest-dcf58',
     authDomain: 'flutterfiretest-dcf58.firebaseapp.com',
+    databaseURL: 'https://flutterfiretest-dcf58-default-rtdb.firebaseio.com',
     storageBucket: 'flutterfiretest-dcf58.firebasestorage.app',
     measurementId: 'G-0QC7PN9RDG',
   );
@@ -61,6 +62,7 @@ class DefaultFirebaseOptions {
     appId: '1:495764425049:android:03df899aaa9cf068c1a448',
     messagingSenderId: '495764425049',
     projectId: 'flutterfiretest-dcf58',
+    databaseURL: 'https://flutterfiretest-dcf58-default-rtdb.firebaseio.com',
     storageBucket: 'flutterfiretest-dcf58.firebasestorage.app',
   );
 
@@ -70,6 +72,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '495764425049',
     projectId: 'flutterfiretest-dcf58',
     authDomain: 'flutterfiretest-dcf58.firebaseapp.com',
+    databaseURL: 'https://flutterfiretest-dcf58-default-rtdb.firebaseio.com',
     storageBucket: 'flutterfiretest-dcf58.firebasestorage.app',
     measurementId: 'G-CVM2H05VQP',
   );

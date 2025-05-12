@@ -1,11 +1,25 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutterfiretest/models/User.dart';
 import 'package:flutterfiretest/models/category_model.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
+
+  DatabaseReference database = FirebaseDatabase.instance.ref();
+  
+  void writeData() {
+  database.child("users/user1").set({
+    'name': 'Alice',
+    'age': 30,
+    'email': 'alice@example.com',
+  }).then((_) {
+    print("Data written successfully!");
+  }).catchError((error) {
+    print("Failed to write data: $error");
+  });
+}
 
   List<CategoryModel> categories = [];
 
@@ -30,6 +44,7 @@ class HomePage extends StatelessWidget {
     default:
       break;
   }
+  writeData();
 }
 
 

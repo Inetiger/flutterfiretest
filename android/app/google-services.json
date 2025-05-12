@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "495764425049",
+    "firebase_url": "https://flutterfiretest-dcf58-default-rtdb.firebaseio.com",
     "project_id": "flutterfiretest-dcf58",
     "storage_bucket": "flutterfiretest-dcf58.firebasestorage.app"
   },
