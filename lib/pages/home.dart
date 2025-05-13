@@ -8,18 +8,9 @@ class HomePage extends StatelessWidget {
   HomePage({super.key});
 
   DatabaseReference database = FirebaseDatabase.instance.ref();
-  
-  void writeData() {
-  database.child("users/user1").set({
-    'name': 'Alice',
-    'age': 30,
-    'email': 'alice@example.com',
-  }).then((_) {
-    print("Data written successfully!");
-  }).catchError((error) {
-    print("Failed to write data: $error");
-  });
-}
+  Map<String, dynamic> UserList = {};
+
+  //UserList.addAll(other);
 
   List<CategoryModel> categories = [];
 
@@ -44,7 +35,6 @@ class HomePage extends StatelessWidget {
     default:
       break;
   }
-  writeData();
 }
 
 
@@ -71,6 +61,10 @@ class HomePage extends StatelessWidget {
                 final newUser = User(name: name);
                 users.add(newUser);
                 print('User created: $newUser');
+                database.child("users/$name").set({
+                  'name': name,
+                  'ID': newUser.userId,
+                });
               }
             },
             child: Text('OK'),
@@ -179,6 +173,7 @@ void _showDeleteUserDialog(BuildContext context) {
                     users.remove(user);
                     Navigator.of(context).pop();
                     print('Deleted user ${user.name}');
+                    database.child("users/${user.name}").remove();
                   },
                 ),
               );
