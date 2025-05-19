@@ -1,4 +1,4 @@
-import 'package:flutterfiretest/models/User.dart';
+import 'package:flutterfiretest/models/user.dart';
 import 'package:flutterfiretest/models/category_model.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
