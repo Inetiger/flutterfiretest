@@ -1,11 +1,11 @@
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutterfiretest/models/user.dart';
 import 'package:flutterfiretest/models/category_model.dart';
 
-class HomePageCategoriesSection extends StatelessWidget {
-  HomePageCategoriesSection({super.key});
+class HomePageCategoriesSection_1 extends StatelessWidget {
+  HomePageCategoriesSection_1({super.key});
 
   final List<CategoryModel> categories = [
     CategoryModel(name: 'Add', iconPath: 'Assets/Icons/plus.svg', boxColor: Color(0xff92A3FD)),
@@ -14,27 +14,27 @@ class HomePageCategoriesSection extends StatelessWidget {
     CategoryModel(name: 'Delete', iconPath: 'Assets/Icons/trash-3.svg', boxColor: Color(0xffC58BF2)),
   ];
 
-  final DatabaseReference database = FirebaseDatabase.instance.ref();
+  final db = FirebaseFirestore.instance;
   
   Map<dynamic, dynamic> firebaseDataUsers = {};
 
-  void getUserValues() {
-    Future<DataSnapshot> snapshot = database.child("users").get();
-    snapshot.then((snapshot) {
-      List<DataSnapshot> userValues = snapshot.children.toList();
-      int index = userValues.length - 1;
-      while (index >= 0) {
-        String? userKey = userValues[index].key;
-        dynamic userValue = userValues[index].children.first.value;
-        firebaseDataUsers[userKey] = userValue;
-        index--;
-      }
-    });
+  void getUserValues(){
+      final usersRef = db.collection("users");
+      usersRef.get().then((snapshot) {
+        for (var doc in snapshot.docs) {
+          final data = doc.data();
+          firebaseDataUsers[doc.id] = data.values.first;
+        }
+      });
   }
 
   void onCategoryTap(CategoryModel category, BuildContext context) {
     switch (category.name) {
       case 'Add':
+        print(firebaseDataUsers.entries.map((entry) {
+          final noe = entry.value;
+          print(noe);
+        }));
         showAddUserDialog(context);
         break;
       case 'Info':
@@ -68,7 +68,8 @@ class HomePageCategoriesSection extends StatelessWidget {
                 if (name.isNotEmpty) {
                   final newUser = User(name: name);
                   print("User created");
-                  database.child("users/${newUser.userId}").set({'name': name});
+                  final Name = <String, String> {"name": name};
+                  db.collection("users").doc(newUser.userId).set(Name);
                   firebaseDataUsers[newUser.userId] = name;
                 } else {
                   print("User not created");
@@ -144,7 +145,8 @@ class HomePageCategoriesSection extends StatelessWidget {
               onPressed: () {
                 final newName = newNameController.text;
                 if (newName.isNotEmpty) {
-                  database.child("users/${entry.key}").update({"name": newName});
+                  final updated = <String, String>{"name": newName};
+                  db.collection("users").doc(entry.key).set(updated);
                   firebaseDataUsers[entry.key] = newName;
                   print('User renamed to $newName');
                 }
@@ -175,7 +177,7 @@ class HomePageCategoriesSection extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).pop();
                           print('Deleted user ${user.value}');
-                          database.child("users/${user.key}").remove();
+                          db.collection("users").doc(user.key).delete();
                           firebaseDataUsers.remove(user.key);
                         },
                       ),
