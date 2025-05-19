@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterfiretest/pages/home_page/home_page.dart';
 import 'package:flutterfiretest/test_widget.dart';
 
 import 'firebase_options.dart';
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Poppins'),
       // home: HomePage(),
-      home: TestWidget(),
+      home: HomePage(),
     );
   }
 }

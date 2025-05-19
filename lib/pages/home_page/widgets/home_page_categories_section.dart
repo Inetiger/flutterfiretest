@@ -1,7 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutterfiretest/models/User.dart';
+import 'package:flutterfiretest/models/user.dart';
 import 'package:flutterfiretest/models/category_model.dart';
 
 class HomePageCategoriesSection extends StatelessWidget {
@@ -17,7 +17,23 @@ class HomePageCategoriesSection extends StatelessWidget {
   final List<User> users = [];
 
   final DatabaseReference database = FirebaseDatabase.instance.ref();
-  // Map<String, dynamic> UserList = {};
+  
+  Map<dynamic, dynamic> firebaseDataUsers = {};
+
+  dynamic getUserValues() {
+    Future<DataSnapshot> snapshot = database.child("users").get();
+    snapshot.then((snapshot) {
+      List<DataSnapshot> userValues = snapshot.children.toList();
+      int index = userValues.length - 1;
+      while (index >= 0) {
+        String? userKey = userValues[index].key;
+        dynamic userValue = userValues[index].children.first.value;
+        firebaseDataUsers[userKey] = userValue;
+        print(firebaseDataUsers);
+        index--;
+      }
+    });
+  }
 
   void onCategoryTap(CategoryModel category, BuildContext context) {
     switch (category.name) {
@@ -56,7 +72,7 @@ class HomePageCategoriesSection extends StatelessWidget {
                   final newUser = User(name: name);
                   users.add(newUser);
                   print('User created: $newUser');
-                  database.child("users/$name").set({'name': name, 'ID': newUser.userId});
+                  database.child("users/${newUser.userId}").set({'name': name});
                 }
               },
               child: Text('OK'),
@@ -157,7 +173,7 @@ class HomePageCategoriesSection extends StatelessWidget {
                           users.remove(user);
                           Navigator.of(context).pop();
                           print('Deleted user ${user.name}');
-                          database.child("users/${user.name}").remove();
+                          database.child("users/${user.userId}").remove();
                         },
                       ),
                     );
