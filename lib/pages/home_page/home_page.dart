@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterfiretest/pages/home_page/widgets/home_page_app_bar.dart';
-import 'package:flutterfiretest/pages/home_page/widgets/home_page_categories_section.dart';
-import 'package:flutterfiretest/pages/home_page/widgets/home_page_categories_section_1.dart';
+//import 'package:flutterfiretest/pages/home_page/widgets/home_page_categories_section_cloud_firestore.dart';
+import 'package:flutterfiretest/pages/home_page/widgets/home_page_categories_section_realtime_database.dart';
 import 'package:flutterfiretest/pages/home_page/widgets/home_page_search_field.dart';
 
 class HomePage extends StatelessWidget {
@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
                 ),
           ),
           SizedBox(height: 15),
-          HomePageCategoriesSection_1(),
+          HomePageCategoriesSectionRealtimeDatabase(),
         ],
       ),
     );

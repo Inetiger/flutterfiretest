@@ -1,11 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutterfiretest/models/user.dart';
 import 'package:flutterfiretest/models/category_model.dart';
 
-class HomePageCategoriesSection_1 extends StatelessWidget {
-  HomePageCategoriesSection_1({super.key});
+class HomePageCategoriesSectionRealtimeDatabase extends StatelessWidget {
+  HomePageCategoriesSectionRealtimeDatabase({super.key});
 
   final List<CategoryModel> categories = [
     CategoryModel(name: 'Add', iconPath: 'Assets/Icons/plus.svg', boxColor: Color(0xff92A3FD)),
@@ -14,27 +14,22 @@ class HomePageCategoriesSection_1 extends StatelessWidget {
     CategoryModel(name: 'Delete', iconPath: 'Assets/Icons/trash-3.svg', boxColor: Color(0xffC58BF2)),
   ];
 
-  final db = FirebaseFirestore.instance;
+  final DatabaseReference database = FirebaseDatabase.instance.ref();
   
-  Map<dynamic, dynamic> firebaseDataUsers = {};
+  final Map<dynamic, dynamic> firebaseDataUsers = {};
 
-  void getUserValues(){
-      final usersRef = db.collection("users");
-      usersRef.get().then((snapshot) {
-        for (var doc in snapshot.docs) {
-          final data = doc.data();
-          firebaseDataUsers[doc.id] = data.values.first;
-        }
-      });
+  void getUserValues() async{
+    DataSnapshot snapshot = await database.child("users").get();
+    List<DataSnapshot> userValues = snapshot.children.toList();
+    
+    for (final document in userValues) {
+      firebaseDataUsers[document.key] = document.children.first.value;
+    }
   }
 
   void onCategoryTap(CategoryModel category, BuildContext context) {
     switch (category.name) {
       case 'Add':
-        print(firebaseDataUsers.entries.map((entry) {
-          final noe = entry.value;
-          print(noe);
-        }));
         showAddUserDialog(context);
         break;
       case 'Info':
@@ -67,12 +62,8 @@ class HomePageCategoriesSection_1 extends StatelessWidget {
                 String name = nameController.text;
                 if (name.isNotEmpty) {
                   final newUser = User(name: name);
-                  print("User created");
-                  final Name = <String, String> {"name": name};
-                  db.collection("users").doc(newUser.userId).set(Name);
+                  database.child("users/${newUser.userId}").set({'name': name});
                   firebaseDataUsers[newUser.userId] = name;
-                } else {
-                  print("User not created");
                 }
               },
               child: Text('OK'),
@@ -145,10 +136,8 @@ class HomePageCategoriesSection_1 extends StatelessWidget {
               onPressed: () {
                 final newName = newNameController.text;
                 if (newName.isNotEmpty) {
-                  final updated = <String, String>{"name": newName};
-                  db.collection("users").doc(entry.key).set(updated);
+                  database.child("users/${entry.key}").update({"name": newName});
                   firebaseDataUsers[entry.key] = newName;
-                  print('User renamed to $newName');
                 }
                 Navigator.of(context).pop();
               },
@@ -176,8 +165,7 @@ class HomePageCategoriesSection_1 extends StatelessWidget {
                         icon: Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
                           Navigator.of(context).pop();
-                          print('Deleted user ${user.value}');
-                          db.collection("users").doc(user.key).delete();
+                          database.child("users/${user.key}").remove();
                           firebaseDataUsers.remove(user.key);
                         },
                       ),
@@ -211,7 +199,7 @@ class HomePageCategoriesSection_1 extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 child: Container(
                   width: 100,
-                  decoration: BoxDecoration(color: categories[index].boxColor.withOpacity(0.3), borderRadius: BorderRadius.circular(16)),
+                  decoration: BoxDecoration(color: categories[index].boxColor.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(16)),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [

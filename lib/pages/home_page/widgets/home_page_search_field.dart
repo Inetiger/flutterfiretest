@@ -8,7 +8,7 @@ class HomePageSearchField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 40, left: 20, right: 20),
-      decoration: BoxDecoration(boxShadow: [BoxShadow(color: Color(0xff1D1617).withOpacity(0.11), blurRadius: 40, spreadRadius: 0.0)]),
+      decoration: BoxDecoration(boxShadow: [BoxShadow(color: Color(0xff1D1617).withValues(alpha: 0.11), blurRadius: 40, spreadRadius: 0.0)]),
       child: TextField(
         decoration: InputDecoration(
           filled: true,
