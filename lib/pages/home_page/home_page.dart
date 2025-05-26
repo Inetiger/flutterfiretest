@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
                 ),
           ),
           SizedBox(height: 15),
-          HomePageCategoriesSection_1(),
+          HomePageCategoriesSection(),
         ],
       ),
     );
