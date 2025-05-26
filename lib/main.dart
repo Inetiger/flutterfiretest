@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterfiretest/pages/home_page/home_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:flutterfiretest/pages/home_page/home_page.dart';
 import 'package:flutterfiretest/test_widget.dart';
 
 import 'firebase_options.dart';
@@ -8,7 +9,7 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      /*title: 'Flutter Demo',
+      /* title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -36,17 +37,16 @@ class MyApp extends StatelessWidget {
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
         primarySwatch: Colors.blue //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),*/
+      ), */
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Poppins'),
       // home: HomePage(),
-      home: HomePage(),
+      home: TestWidget(),
     );
   }
 }
 
-/*
-class MyHomePage extends StatefulWidget {
+/* class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -130,5 +130,4 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-}
-*/
+} */

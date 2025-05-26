@@ -7,10 +7,11 @@ import 'package:flutter_svg/svg.dart';
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
-  DatabaseReference database = FirebaseDatabase.instance.ref();
-  Map<String, dynamic> UserList = {};
+  final DatabaseReference database = FirebaseDatabase.instance.ref();
 
-  List<CategoryModel> categories = [];
+  final Map<String, dynamic> userList = {};
+
+  final List<CategoryModel> categories = [];
 
   void _onCategoryTap(CategoryModel category, BuildContext context) {
   switch (category.name) {
@@ -32,10 +33,10 @@ class HomePage extends StatelessWidget {
 }
 
 
-  List<User> users = [];
+  final List<User> users = [];
 
   void _showAddUserDialog(BuildContext context) {
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
 
   showDialog(
     context: context,
@@ -43,18 +44,17 @@ class HomePage extends StatelessWidget {
       return AlertDialog(
         title: Text('Enter your name'),
         content: TextField(
-          controller: _nameController,
+          controller: nameController,
           decoration: InputDecoration(hintText: "Name"),
         ),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              String name = _nameController.text;
+              String name = nameController.text;
               if (name.isNotEmpty) {
                 final newUser = User(name: name);
                 users.add(newUser);
-                print('User created: $newUser');
                 database.child("users/$name").set({
                   'name': name,
                   'ID': newUser.userId,
@@ -121,7 +121,7 @@ void _showChangeUserDialog(BuildContext context) {
 }
 
 void _showRenameDialog(BuildContext context, User user) {
-  final TextEditingController _newNameController = TextEditingController();
+  final TextEditingController newNameController = TextEditingController();
 
   showDialog(
     context: context,
@@ -129,16 +129,15 @@ void _showRenameDialog(BuildContext context, User user) {
       return AlertDialog(
         title: Text('Rename ${user.name}'),
         content: TextField(
-          controller: _newNameController,
+          controller: newNameController,
           decoration: InputDecoration(hintText: 'New name'),
         ),
         actions: [
           TextButton(
             onPressed: () {
-              final newName = _newNameController.text;
+              final newName = newNameController.text;
               if (newName.isNotEmpty) {
                 user.name = newName; // Only works if name is not final
-                print('User renamed to $newName');
               }
               Navigator.of(context).pop();
             },
@@ -166,7 +165,6 @@ void _showDeleteUserDialog(BuildContext context) {
                   onPressed: () {
                     users.remove(user);
                     Navigator.of(context).pop();
-                    print('Deleted user ${user.name}');
                     database.child("users/${user.name}").remove();
                   },
                 ),
@@ -212,7 +210,7 @@ void _showDeleteUserDialog(BuildContext context) {
               ),
             ),
             SizedBox(height: 15),
-            Container(
+            SizedBox(
               height: 120,
               child: ListView.separated(
                 itemCount: categories.length,
@@ -231,7 +229,7 @@ void _showDeleteUserDialog(BuildContext context) {
                     child: Container(
                       width: 100,
                       decoration: BoxDecoration(
-                        color: categories[index].boxColor.withOpacity(0.3),
+                        color: categories[index].boxColor.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Column(
@@ -274,7 +272,7 @@ void _showDeleteUserDialog(BuildContext context) {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: Color(0xff1D1617).withOpacity(0.11),
+                color: Color(0xff1D1617).withValues(alpha: 0.11),
                 blurRadius: 40,
                 spreadRadius: 0.0,
               ),
@@ -294,7 +292,7 @@ void _showDeleteUserDialog(BuildContext context) {
                 padding: const EdgeInsets.all(12),
                 child: SvgPicture.asset('Assets/Icons/Search.svg'),
               ),
-              suffixIcon: Container(
+              suffixIcon: SizedBox(
                 width: 100,
                 child: IntrinsicHeight(
                   child: Row(
